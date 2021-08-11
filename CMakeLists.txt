@@ -17,9 +17,43 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(cav_msgs REQUIRED)
+
+include_directories(
+  include
+  ${std_msgs_INCLUDE_DIRS}
+  ${lifecycle_msgs_INCLUDE_DIRS}
+  ${rclcpp_lifecycle_INCLUDE_DIRS}
+  ${rclcpp_INCLUDE_DIRS})
+
+### demos
+add_executable(lifecycle_dummy_pub
+  src/lifecycle_dummy_pub.cpp)
+ament_target_dependencies(lifecycle_dummy_pub cav_msgs)
+target_link_libraries(lifecycle_dummy_pub
+  ${rclcpp_lifecycle_LIBRARIES}
+  ${std_msgs_LIBRARIES}
+)
+
+add_executable(lifecycle_dummy_sub
+  src/lifecycle_dummy_sub.cpp)
+ament_target_dependencies(lifecycle_dummy_sub cav_msgs)
+target_link_libraries(lifecycle_dummy_sub
+  ${rclcpp_lifecycle_LIBRARIES}
+  ${std_msgs_LIBRARIES}
+)
+
+
+# Install 
+install(TARGETS
+  lifecycle_dummy_pub
+  lifecycle_dummy_sub
+  #lifecycle_service_client
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
