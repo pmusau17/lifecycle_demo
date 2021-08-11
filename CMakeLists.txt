@@ -47,12 +47,20 @@ target_link_libraries(lifecycle_dummy_sub
   ${std_msgs_LIBRARIES}
 )
 
+add_executable(lifecycle_manager
+  src/lifecycle_manager.cpp)
+ament_target_dependencies(lifecycle_manager cav_msgs)
+target_link_libraries(lifecycle_manager
+  ${rclcpp_lifecycle_LIBRARIES}
+  ${std_msgs_LIBRARIES}
+)
+
 
 # Install 
 install(TARGETS
   lifecycle_dummy_pub
   lifecycle_dummy_sub
-  #lifecycle_service_client
+  lifecycle_manager
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
@@ -65,5 +73,11 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 ament_package()
